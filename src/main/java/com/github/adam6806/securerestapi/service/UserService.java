@@ -1,15 +1,18 @@
-package com.devglan.service;
+package com.github.adam6806.securerestapi.service;
 
-import com.devglan.model.User;
-import com.devglan.model.UserDto;
+import com.github.adam6806.securerestapi.model.User;
+import com.github.adam6806.securerestapi.model.UserDto;
 
 import java.util.List;
 
 public interface UserService {
 
     User save(UserDto user);
+
     List<User> findAll();
+
     void delete(long id);
+
     User findOne(String username);
 
     User findById(Long id);

@@ -1,6 +1,5 @@
-package com.devglan.config;
+package com.github.adam6806.securerestapi.config;
 
-import com.devglan.model.User;
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,9 +15,7 @@ import java.util.Date;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.devglan.model.Constants.ACCESS_TOKEN_VALIDITY_SECONDS;
-import static com.devglan.model.Constants.AUTHORITIES_KEY;
-import static com.devglan.model.Constants.SIGNING_KEY;
+import static com.github.adam6806.securerestapi.model.Constants.*;
 
 @Component
 public class TokenProvider implements Serializable {
@@ -57,15 +54,15 @@ public class TokenProvider implements Serializable {
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
                 .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (
-              username.equals(userDetails.getUsername())
-                    && !isTokenExpired(token));
+                username.equals(userDetails.getUsername())
+                        && !isTokenExpired(token));
     }
 
     UsernamePasswordAuthenticationToken getAuthentication(final String token, final Authentication existingAuth, final UserDetails userDetails) {

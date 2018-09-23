@@ -1,8 +1,9 @@
-package com.devglan.config;
+package com.github.adam6806.securerestapi.config;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.devglan.model.Constants.HEADER_STRING;
-import static com.devglan.model.Constants.TOKEN_PREFIX;
+import static com.github.adam6806.securerestapi.model.Constants.HEADER_STRING;
+import static com.github.adam6806.securerestapi.model.Constants.TOKEN_PREFIX;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Qualifier("userService")
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -33,14 +35,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
         String authToken = null;
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
-            authToken = header.replace(TOKEN_PREFIX,"");
+            authToken = header.replace(TOKEN_PREFIX, "");
             try {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
             } catch (IllegalArgumentException e) {
                 logger.error("an error occured during getting username from token", e);
             } catch (ExpiredJwtException e) {
                 logger.warn("the token is expired and not valid anymore", e);
-            } catch(SignatureException e){
+            } catch (SignatureException e) {
                 logger.error("Authentication Failed. Username or Password not valid.");
             }
         } else {

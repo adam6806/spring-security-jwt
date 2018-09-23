@@ -1,4 +1,4 @@
-package com.devglan;
+package com.github.adam6806.securerestapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
